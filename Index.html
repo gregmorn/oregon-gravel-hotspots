@@ -1,0 +1,30 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Honey Badger Oregon Gravel Riding Hotspots</title><link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"><style>body{font:16px/1.55 system-ui,sans-serif;max-width:1050px;margin:auto;padding:20px;color:#233}h1{line-height:1.2}#map{height:480px;border-radius:12px;background:#eee}table{border-collapse:collapse;width:100%}th,td{padding:10px;border-bottom:1px solid #ddd;text-align:left}a{color:#146b89}small{color:#666} .leaflet-popup-content{min-width:245px;max-width:310px} .camp-list{padding-left:18px;margin:7px 0} .camp-list li{margin:8px 0} .camp-list small{display:block} .leaflet-popup-content a{color:#146b89}</style></head><body><h1>Honey Badger Gravel — Oregon riding hotspots</h1><p>Southern Oregon gravel riding regions associated with Honey Badger Rides. Click any riding hotspot to see nearby camping options, campground map links, and the original location link.</p><div id="map" aria-label="Interactive riding hotspots map"></div><p><small>Map pins are general route regions or reference points, not precise GPX starting locations. Campgrounds are suggested basecamps, not necessarily the closest by road. Verify access, season, and reservations before travel. Map tiles and links require internet access.</small></p><h2>Route highlights</h2><table><thead><tr><th>Route area</th><th>Distance options</th><th>Climbing</th></tr></thead><tbody><tr><td><a href="https://honeybadgerrides.com/flywheel-honey-badger/">Flywheel / Talent</a></td><td>32–57 mi</td><td>4,869–7,545 ft</td></tr><tr><td><a href="https://honeybadgerrides.com/lost-creek-lake-honey-badger/">Lost Creek Lake</a></td><td>42–64 mi</td><td>5,097–6,582 ft</td></tr><tr><td><a href="https://honeybadgerrides.com/wimer-honey-badger/">Elderberry Flats</a></td><td>42 mi</td><td>4,236 ft</td></tr><tr><td><a href="https://honeybadgerrides.com/big-elk-honey-badger/">Big Elk</a></td><td>Short, medium, long</td><td>Gentler gradients</td></tr></tbody></table><p>The Honey Badger site provides RideWithGPS routes that you can export as GPX files.</p><p><strong>Start here:</strong> <a href="https://honeybadgerrides.com/">Honey Badger Rides — official website</a>.</p><p>For forested gravel riding similar to the Ochocos, investigate <strong>Big Elk, Lost Creek Lake, and Prospect–Butte Falls</strong> first. These offer extensive forest-road riding with relatively remote scenery.</p><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><script>
+const camp={
+ talent:[['Emigrant Lake County Campground','Lake camping near Ashland'],['Ashland RV Park','Developed RV base'],['Hyatt Lake Campground','Higher-elevation lake base']],
+ greensprings:[['Hyatt Lake Campground','Reservable lakeside sites','https://www.recreation.gov/camping/campgrounds/250031'],['Wildcat Campground Hyatt Lake','Primitive lakeside sites','https://www.recreation.gov/camping/campgrounds/250031'],['Howard Prairie Lake Resort','Developed lake campground']],
+ bigelk:[['Hyatt Lake Campground','Mountain lake base','https://www.recreation.gov/camping/campgrounds/250031'],['Howard Prairie Lake Resort','Lakeside campground'],['Fish Lake Campground Oregon','Forest/lake camping']],
+ lostcreek:[['Joseph H. Stewart County Park Campground','Developed campground at Lost Creek Lake'],['Rogue Elk County Park Campground','Rogue River camping'],['Mill Creek Campground Prospect Oregon','Rustic forest campground']],
+ elderberry:[['Elderberry Flat Campground Oregon','Rustic creekside BLM campground'],['Rogue Elk County Park Campground','Developed alternative farther east'],['Valley of the Rogue State Park Campground','Developed Rogue River corridor base']],
+ trestle:[['Emigrant Lake County Campground','Ashland-area lake base'],['Mount Ashland Campground','Higher-elevation forest camping'],['Hyatt Lake Campground','Mountain lake alternative','https://www.recreation.gov/camping/campgrounds/250031']],
+ prospect:[['Mill Creek Campground Prospect Oregon','Small forest campground'],['Union Creek Campground Rogue River Oregon','Old-growth Rogue River base'],['Natural Bridge Campground Prospect Oregon','Upper Rogue River base'],['Joseph H. Stewart County Park Campground','Developed lake alternative']]
+};
+const places=[
+ {id:'talent',name:'Talent / Flywheel',lat:42.2457,lon:-122.7886},
+ {id:'greensprings',name:'Greensprings',lat:42.190,lon:-122.490},
+ {id:'bigelk',name:'Big Elk / Brown Mountain',lat:42.39,lon:-122.50},
+ {id:'lostcreek',name:'Lost Creek Lake',lat:42.67,lon:-122.62},
+ {id:'elderberry',name:'Elderberry Flats',lat:42.55,lon:-123.13},
+ {id:'trestle',name:'Trestle / Colestin',lat:42.07,lon:-122.61},
+ {id:'prospect',name:'Prospect / Butte Falls',lat:42.75,lon:-122.49}
+];
+const googleSearch=q=>'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q);
+const m=L.map('map').setView([42.43,-122.75],9);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap contributors',maxZoom:18}).addTo(m);
+const markers=[];
+places.forEach(p=>{
+ const list=camp[p.id].map(([name,note,official])=>'<li><a href="'+googleSearch(name)+'" target="_blank" rel="noopener">'+name+' ↗</a><small>'+note+(official?' · <a target="_blank" rel="noopener" href="'+official+'">Campground details</a>':'')+'</small></li>').join('');
+ const html='<strong>'+p.name+'</strong><p><a target="_blank" rel="noopener" href="'+googleSearch(p.name+', Oregon')+'">Riding hotspot in Google Maps ↗</a></p><b>Nearby camping options</b><ul class="camp-list">'+list+'</ul><small>Check current campground status and driving access.</small>';
+ markers.push(L.marker([p.lat,p.lon]).addTo(m).bindPopup(html,{maxWidth:340}));
+});
+m.fitBounds(L.featureGroup(markers).getBounds().pad(.15));
+</script></body></html>
